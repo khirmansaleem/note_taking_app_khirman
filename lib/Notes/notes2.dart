@@ -1,4 +1,4 @@
-// ::=> Build Context::
+// ::=> Build Context::----------------------------------->
 //======================================================================
 // It represents the position of a widget in the overall app structure,
 // it is kind of address that tells flutter where to locate that widget
@@ -8,9 +8,17 @@
 // color and font styles, based on it's position in the tree.
 
 //=======================================================================
-// ::==>Email verification not working
+// ::==>Email verification not working------------------------------>
 // then try to login using no credentials, then it will contact the firebase,
 // then again login with correct credentials, it will work fine then.
 // when you have verified user, application is not gonna immediately understand
 // you have to login again with the credentials so that the firebase will
 // understand that user is verified.
+//==========================================================================
+//:: ==> Named Routes Vs Anonymous Routes::--------------------------->
+//===========================================================================
+// Route is the path that starts from a view and ends on a view.
+//named routes--> are with unique names in the app's routing table while
+// anonymous routes--> are created without name in the app routing table.
+// and created inline without a name.
+//---------------------------------------------------------------------------

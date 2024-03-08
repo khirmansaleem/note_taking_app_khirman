@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:note_taking_app_khirman/views/registerview.dart';
 import '../firebase_options.dart';
 
 class LoginView extends StatefulWidget {
@@ -90,6 +91,13 @@ class _LoginViewState extends State<LoginView> {
                       'Login',
                       style: TextStyle(color: Colors.white),
                     ),
+                  ),
+
+                  TextButton(onPressed: (){
+                    Navigator.pushNamed(context, '/register');
+
+                  },
+                      child: const Text("Not Registered yet? Register here!")
                   ),
                 ],
               ),

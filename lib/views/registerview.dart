@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:note_taking_app_khirman/views/loginview.dart';
 import '../firebase_options.dart';
 import 'firebase_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -75,6 +75,7 @@ class _RegisterViewState extends State<RegisterView> {
                       on FirebaseAuthException catch (e) {
                         Fluttertoast.showToast(msg:e.code);
                       }
+
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.blue, // Background color
@@ -83,6 +84,12 @@ class _RegisterViewState extends State<RegisterView> {
                       'Register',
                       style: TextStyle(color: Colors.white),
                     ),
+                  ),
+
+                  TextButton(onPressed: (){
+                    Navigator.pushNamed(context, '/login');
+                  },
+                      child: const Text("Already Registered? Sign in here!")
                   ),
                 ],
               ),

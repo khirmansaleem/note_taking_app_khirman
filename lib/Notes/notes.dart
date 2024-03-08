@@ -1,6 +1,6 @@
 
 //=====================WIDGETS:::=======================================
-// ctrl+ . --> to bind code
+// ctrl+ . --> to bind code ==>
 // ctrl +alt +l --> indent all the code
 // ctrl +shift + F --> to search for anything in entire project.
 // =============>shift+F6 <============ --> renaming in one go.
