@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "50484837227",
+    "project_id": "khirmannotes",
+    "storage_bucket": "khirmannotes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50484837227:android:e147980d037d01bc222a2e",
+        "android_client_info": {
+          "package_name": "com.khirmanassociation.note_taking_app_khirman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDagI5yS0TFQ9BtQmuK4PN-9SPMllpPTYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
