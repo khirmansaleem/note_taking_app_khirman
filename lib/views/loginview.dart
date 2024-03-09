@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:note_taking_app_khirman/views/registerview.dart';
-import '../firebase_options.dart';
+import 'dart:developer' as devtools show log;
+import 'package:note_taking_app_khirman/constants/routes.dart';
+import 'package:note_taking_app_khirman/utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -69,18 +69,39 @@ class _LoginViewState extends State<LoginView> {
                       try{
                         final a= await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: email, password: password);
-                        Fluttertoast.showToast(msg: "Logged In Successfully");
-                        print(a);
+                        final user=FirebaseAuth.instance.currentUser;// it gives us the logged in user
+                        //in the firebase.
+                        if(user!=null) { // user is logged in, current user not null
+                          if (user.emailVerified) {
+                            Fluttertoast.showToast(msg: "Logged In Successfully");
+                            devtools.log(a.toString());
+                            //  Navigator.pushNamed(context, '/notesview');
+                            Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "Verify your email first.");
+                            Navigator.of(context).pushNamedAndRemoveUntil(emailVerRoute, (route) => false);
+
+                          }
+                        }
+
                       }
                       on FirebaseAuthException catch (e) {
-                        print(e.code);
+                       devtools.log(e.code);
                         switch (e.code) {
                           case 'invalid-credential':
+                            await showErrDialog(context, 'Invalid Credentials');
                             Fluttertoast.showToast(msg: "Invalid credentials. Please check your email and password.");
                             break;
                           default:
+                            await showErrDialog(context,e.code);
                             Fluttertoast.showToast(msg: e.code);
                         }
+                      }
+                      // ALSO HANDLING GENERIC EXCEPTIONS
+                      catch(e){
+                        await showErrDialog(context,e.toString());
                       }
                       }
                    ,
@@ -92,17 +113,16 @@ class _LoginViewState extends State<LoginView> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-
+                    // final user=FirebaseAuth.instance.currentUser;
                   TextButton(onPressed: (){
-                    Navigator.pushNamed(context, '/register');
+                    Navigator.pushNamed(context, registerRoute);
 
                   },
                       child: const Text("Not Registered yet? Register here!")
                   ),
                 ],
               ),
-
       );
-
   }
 }
+

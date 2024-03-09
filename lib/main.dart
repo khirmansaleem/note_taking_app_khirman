@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:note_taking_app_khirman/views/loginview.dart';
 import 'package:note_taking_app_khirman/views/registerview.dart';
 import 'package:note_taking_app_khirman/views/verifyemailview.dart';
+import 'package:note_taking_app_khirman/views/notesview.dart';
 import 'firebase_options.dart';
+import 'package:note_taking_app_khirman/constants/routes.dart';
 void main() {
   // for firebase to be initialized before anything else
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +18,10 @@ void main() {
     ),
     home: const HomePage(),
     routes: {
-      '/login' : (context) => const LoginView(),
-      '/register' : (context)=> const RegisterView(),
-      '/email' :(context)=> const VerifyEmailView(),
+       loginRoute: (context) => const LoginView(),
+      registerRoute : (context)=> const RegisterView(),
+      emailVerRoute :(context)=> const VerifyEmailView(),
+      notesRoute :(context)=> const NotesView(),
     },
   ));
 }
@@ -27,8 +30,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
+      return FutureBuilder(
       // future passed to the futureBuilder is the firebase
       //initialization.
       future: Firebase.initializeApp(
@@ -39,28 +41,24 @@ class HomePage extends StatelessWidget {
     case ConnectionState.done:
       final user=FirebaseAuth.instance.currentUser;// it gives us the logged in user
       //in the firebase.
-      if(user?.emailVerified ?? false){
-        print("user email is verified");
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginView()),);
-        });// push a widget on the screen
+      if(user!=null) {// user is logged in, current user not null
+        if (!user.emailVerified) {
+          return const VerifyEmailView();
+        }
+        else{
+          return const NotesView();
+        }
+      }
+      else {
+        return const LoginView();
+      }
 
-      }
-      else{
-        print("Verify your email please.");
-        //".addPostFrameCallback()"--> it defers the navigation process until the build
-        // method completes, navigation not interfering with build process
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const VerifyEmailView()),);
-        });// push a widget on the screen
-      }
-      return const Text('Connection is done');
 
     default:
     return const CircularProgressIndicator();
     }
     }
-    ),
+
   );
   }
 }

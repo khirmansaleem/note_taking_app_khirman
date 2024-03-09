@@ -1,10 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:note_taking_app_khirman/views/loginview.dart';
-import '../firebase_options.dart';
-import 'firebase_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:note_taking_app_khirman/constants/routes.dart';
+import 'dart:developer' as devtools show log;
+import 'package:note_taking_app_khirman/utilities/show_error_dialog.dart';
+
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -70,10 +70,21 @@ class _RegisterViewState extends State<RegisterView> {
                             .createUserWithEmailAndPassword(
                             email: email, password: password);
                         Fluttertoast.showToast(msg: "User registered Successfully");
-                        print(a);
+                        devtools.log(a.toString());
+                        // before navigating to email_verification_view
+                      // actually send the email
+                        final user=FirebaseAuth.instance.currentUser;
+                         await user?.sendEmailVerification();
+                        Navigator.of(context).pushNamed(emailVerRoute);
+
                       }
                       on FirebaseAuthException catch (e) {
+                        await showErrDialog(context,e.code);
                         Fluttertoast.showToast(msg:e.code);
+                      }
+                      // ALSO HANDLING GENERIC EXCEPTIONS
+                      catch(e){
+                        await showErrDialog(context,e.toString());
                       }
 
                     },
