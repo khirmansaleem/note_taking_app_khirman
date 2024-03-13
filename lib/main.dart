@@ -1,6 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
 import 'package:note_taking_app_khirman/views/loginview.dart';
 import 'package:note_taking_app_khirman/views/registerview.dart';
 import 'package:note_taking_app_khirman/views/verifyemailview.dart';
@@ -33,16 +32,14 @@ class HomePage extends StatelessWidget {
       return FutureBuilder(
       // future passed to the futureBuilder is the firebase
       //initialization.
-      future: Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    ),
+      future:AuthService.firebase().initialize(),
     builder: (context, snapshot){
     switch (snapshot.connectionState) {
     case ConnectionState.done:
-      final user=FirebaseAuth.instance.currentUser;// it gives us the logged in user
+      final user=AuthService.firebase().currentUser;// it gives us the logged in user
       //in the firebase.
       if(user!=null) {// user is logged in, current user not null
-        if (!user.emailVerified) {
+        if (!user.isEmailVerified) {
           return const VerifyEmailView();
         }
         else{

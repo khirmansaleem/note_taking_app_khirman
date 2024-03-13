@@ -58,3 +58,41 @@
 // objects have a function "toString()" using this they can be converted to the
 // strings.
 //------------------------------------------------------------------------------
+//==============================================================================
+//------- UI LOGIC AND BACKEND LOGIC SHOULD BE SEPERATED FROM EACH OTHER
+// -----------------------------------------------------------------------------
+// Firebase is basically the low level abstraction layer that is providing
+// high level information to you.
+// Firebase should not be directly mixed with the UI code, it is low level
+// compared to the UI code, there should be an abstraction layer between
+// the UI and firebase backend, there is always some abstraction layer
+// between them.
+// Ui will be talking with the Firebase Service , and in return that service
+// will be talkng to a provider. and provider will talk to firebase.
+//==============================================================================
+// Immutable Annotation:::-------------------------------------------------==>
+// when an annotation immutable is used with a class means that this class
+// and it's subclasses are immutable , they cannot contain a field that change
+//it's value in initialation
+
+//==============================================================================
+// In dart if you are using (_) to ignore the argument, it is actually not
+// ignoring the argument , just passing '_' as the argument.
+//-----------------------------------------------------------------------------
+//==============================================================================
+// =====================> SERVICES AND PROVIDERS <===========================
+// ----------------------------------------------------------------------------
+//Services are tasks that can run in the background of the application,
+// handling various operations without directly interfering with the UI logic.
+// Providers are mechanisms that supply these services to different parts of
+// the application and manage when and where they are provided, facilitating
+// the use of services where needed without coupling the service logic tightly
+// to the UI components.
+//==========================================================================================
+//----------------------------------------------------------------------------------------
+//These services encapsulate the logic required to interact with Firebase's features, such
+// as authenticating users, sending or receiving messages, and managing notifications,
+// thereby separating this logic from the UI components. This approach allows for cleaner,
+// more maintainable code and a better separation of concerns within the application.
+//=======================================================================================
+//--------------------------------------------------------------------------------------

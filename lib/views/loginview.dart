@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:developer' as devtools show log;
 import 'package:note_taking_app_khirman/constants/routes.dart';
+import 'package:note_taking_app_khirman/services/auth/auth_exceptions.dart';
+import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
 import 'package:note_taking_app_khirman/utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
@@ -67,14 +67,13 @@ class _LoginViewState extends State<LoginView> {
                       final password = _password.text;
 
                       try{
-                        final a= await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email, password: password);
-                        final user=FirebaseAuth.instance.currentUser;// it gives us the logged in user
+                      await AuthService.firebase().logIn(email: email, password: password);
+
+                        final user=AuthService.firebase().currentUser;// it gives us the logged in user
                         //in the firebase.
                         if(user!=null) { // user is logged in, current user not null
-                          if (user.emailVerified) {
+                          if (user.isEmailVerified) {
                             Fluttertoast.showToast(msg: "Logged In Successfully");
-                            devtools.log(a.toString());
                             //  Navigator.pushNamed(context, '/notesview');
                             Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
 
@@ -87,17 +86,11 @@ class _LoginViewState extends State<LoginView> {
                         }
 
                       }
-                      on FirebaseAuthException catch (e) {
-                       devtools.log(e.code);
-                        switch (e.code) {
-                          case 'invalid-credential':
-                            await showErrDialog(context, 'Invalid Credentials');
-                            Fluttertoast.showToast(msg: "Invalid credentials. Please check your email and password.");
-                            break;
-                          default:
-                            await showErrDialog(context,e.code);
-                            Fluttertoast.showToast(msg: e.code);
-                        }
+                      on InvalidCredentialsAuthException catch(e){
+                        await showErrDialog(context, 'Invalid Credentials');
+                      }
+                      on GenericAuthException catch(e){
+                        await showErrDialog(context,'Authentication error');
                       }
                       // ALSO HANDLING GENERIC EXCEPTIONS
                       catch(e){

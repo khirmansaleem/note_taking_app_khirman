@@ -1,13 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
-
 import 'package:note_taking_app_khirman/constants/routes.dart';
+import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
+import '../lib/enums/MenuActions.dart';
+
 // you can use alias for the import so you may not confuse in choosing right
 // import in your project.
-enum MenuAction{
-  logout
-}
+
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
 
@@ -57,7 +56,7 @@ class _NotesViewState extends State<NotesView> {
                     final shouldlogout=await showLogOutDialog(context);
                     devtools.log(shouldlogout.toString());
                     if(shouldlogout){
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.pushNamed(context, loginRoute);
                     }
                     //break;
