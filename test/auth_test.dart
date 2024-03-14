@@ -13,9 +13,10 @@ void main(){
    final provider=MockAuthProvider();
    // we are going to run a test on the initialize field , it should be false when initially run it
    test('should not be initialized before starting!', (){
-     expect(provider._isInitialized, false);
+     expect(provider._isInitialized, false);// actual ----- expected
+     // if actual value equal to expected ... test will  be passed.
    });
-   test('should be initialized before logging out!',(){ // expect the logout to throw an exception when not
+   test('Not initialized yet, so logout should throw an exception!',(){ // expect the logout to throw an exception when not
      // initialized
      expect(provider.logOut(), throwsA(const TypeMatcher<NotInitializedException>()));
    });
@@ -57,7 +58,6 @@ void main(){
    });
  });
 
-
 }
 class NotInitializedException implements Exception {
 
@@ -78,8 +78,6 @@ class MockAuthProvider implements AuthProvider{
   await Future.delayed(const Duration(seconds: 1)); // delay for faking the user creation for testing purpose
    // create user actually log in that user as well.
    return logIn(email: email, password: password);
-
-
   }
 
   @override

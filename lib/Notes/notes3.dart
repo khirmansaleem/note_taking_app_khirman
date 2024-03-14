@@ -60,6 +60,11 @@
 // explaining it with example like authService is dependant on auth provider, it is not making an assumption that
 // it is always including firebaseProvider only, auth service is dependant on a provider and using const constructor,
 // injecting the provider into the AuthService.
+//=============================================================================
+//so dependency injection means an object needs some functionalities, rather than
+// implementing those functionalities, it depend on other object for those
+// functionalities, like  authProvider contains the functionality and AuthService
+// just mirroring it's functionalities, and injecting dependency into authservice class.
 //================================================================================================================>
 //+++++++++++++++++++++++++++++++++++++++++++++++ MOCK AUTH PROVIDER++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // creating a provider which includes all the functionalities that auth provider has but some customize logic will
