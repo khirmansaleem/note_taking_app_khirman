@@ -1,4 +1,3 @@
-
 const dbname='notes.db';
 const notesTable='notes';
 const userTable='user';

@@ -14,10 +14,12 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class AuthUser{
+  final String? email;
   final bool isEmailVerified;
-  const AuthUser({required this.isEmailVerified});// required named parameter make it easy to understand what
+  const AuthUser({required this.email,required this.isEmailVerified});// required named parameter make it easy to understand what
   // the arguement is.
 // copy of firebase user to our own user
   // this is done to not expose the firebase user to our ui logic
-factory AuthUser.fromFirebase(User user)=>AuthUser(isEmailVerified: user.emailVerified);
+factory AuthUser.fromFirebase(User user)=>AuthUser(email:user.email,
+    isEmailVerified: user.emailVerified );
 }

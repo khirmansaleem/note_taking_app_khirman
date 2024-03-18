@@ -1,6 +1,7 @@
 // CRUD --> create , read, update and delete.
-//==============================================================================
-//---------------------------------SqLite -------------------------------------
+//==============================================================================================================
+//---------------------------------SqLite ---------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 // sqlite is library created in C, that allow us to store data inside a file.
 // sqlite is a database engine going to use in our application.
 // sqlite database is  a file that sits on the disk, and there is sqlite engine that
@@ -8,9 +9,9 @@
 //  or it can bring to terminal.
 // we will bring this sqlite engine into flutter application, so our app should talk to the
 // database.
-//================================================================================
-//_________________ DB Browser for sqlite_______________________________________
-//==============================================================================
+//===============================================================================================================
+//_________________ DB Browser for sqlite____________________________________________________________________________
+//=================================================================================================================
 // DB Browser for SQLite (DB4S) is a high quality, visual, open source tool to
 // create, design, and edit database files compatible with SQLite.
 //==============================================================================
@@ -29,20 +30,33 @@
 // =============================================================================
 // sqflite --> package for storage of our data. for actual storage and talking
 // with our database.
+//=====================application document directory=======================================
+// where app stores it's persistent data on the user device.
+//-------------------------------------------------------------------------------------------
 // path provider --> to get app's document's directory for database storage.
 //path package gives the full path of the file in the document folder.
 // it has a join function.
 // path provider, gives the path of the directory, and path package joins path
 // with the filename and gives the entire path to that file.
 // ----------------------------------------------------------------------------
-// when we talk with the database we are gonna nead hash tables, for reading every row from that table.
+// when we talk with the database we are gonna need hash tables, for reading every row from that table.
 // =============================================================================================================
 // ---------------------------------covariant keyword in dart ------------------------------------------------->
 // this keyword allows you to change the behavior of input parameters, so they do not necessarily conforms to the
 // signature of that parameter in the super class.
+// allow the subclass to accept a more specific type of parameter than one defined in the parent class.
+// if in parent class, object is passed as parameter --> this can any object.
+// but in child class we are specifying the object should be of same class.
+// child class can implement more specific behavior while still adhering to the contract in the superclass.
 //===============================================================================================================
 //----------------------------TRIPLE QUOTATION MARK IN DART--------------------------------------------
 //triple quotation marks (either ''' or """) are used to create multi-line strings.
 // This allows you to include a string that spans several lines without needing to use
 // the newline escape character \n at the end of each line.
 //===============================================================================================================
+//  when an application is installed, local database associated with this app will be stored in the storage
+// of that device.
+//in flutter using path and path provider, we are getting the path where that local database file will
+// be stored on the user device.
+//===============================================================================
+// =================================================================================
