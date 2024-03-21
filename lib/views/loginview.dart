@@ -3,7 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:note_taking_app_khirman/constants/routes.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_exceptions.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
-import 'package:note_taking_app_khirman/utilities/show_error_dialog.dart';
+import 'package:note_taking_app_khirman/utilities/dailog/error_dialog.dart';
+
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -89,8 +90,8 @@ class _LoginViewState extends State<LoginView> {
                       on InvalidCredentialsAuthException catch(e){
                         await showErrDialog(context, 'Invalid Credentials');
                       }
-                      on GenericAuthException catch(e){
-                        await showErrDialog(context,'Authentication error');
+                       catch(e){
+                        await showErrDialog(context,e.toString());
                       }
                       // ALSO HANDLING GENERIC EXCEPTIONS
                       catch(e){

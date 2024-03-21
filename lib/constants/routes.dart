@@ -3,5 +3,5 @@ const loginRoute='/login';
 const registerRoute='/register';
 const emailVerRoute='/email';
 const notesRoute='/note/';
-const newNotesRoute='/newnote';
+const createOrUpdateNotesRoute='/newnote';
 //==============================================================================

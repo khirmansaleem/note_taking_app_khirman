@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
+import 'package:note_taking_app_khirman/services/cloud/cloud_note.dart';
+import 'package:note_taking_app_khirman/services/cloud/firebase_cloud_storage.dart';
 import 'package:note_taking_app_khirman/services/crud/notes_services.dart';
+import 'package:note_taking_app_khirman/utilities/generics/get_arguments.dart';
 
-class NewNotesView extends StatefulWidget {
-  const NewNotesView({super.key});
+class CreateUpdateNotesView extends StatefulWidget {
+  const CreateUpdateNotesView({super.key});
 
   @override
-  State<NewNotesView> createState() => _NewNotesViewState();
+  State<CreateUpdateNotesView> createState() => _CreateUpdateNotesViewState();
 }
 
-class _NewNotesViewState extends State<NewNotesView> {
+class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
   // keep hold of note
-  DatabaseNotes? _note;
+  CloudNote? _note;
   // keep hold of note service too:
-  // and make it late final so that no need to create instance over and over
-  // instance will be created when it is used
-  late final NoteService _noteservice;
+  // they will be initialized in the initState, uptill that point we are making
+  // contract that they will be initalized before use.
+  late final FirebaseCloudStorage _noteservice;
   late final TextEditingController textController;
 
   @override
   void initState() {
-    _noteservice=NoteService();
+    // calling factory constructor to return the existing instance from
+    // _shared.
+    _noteservice=FirebaseCloudStorage();
     textController=TextEditingController();
 
     super.initState();
@@ -41,8 +46,18 @@ class _NewNotesViewState extends State<NewNotesView> {
 
   // creating a validation type function for creating notes,
   // if note already exist then not create, otherwise create.
-  Future<DatabaseNotes> createNote()async{
+  Future<CloudNote> createOrGetExistingNote(BuildContext context)async{
+   // receive databaseNote as argument which is to be modified
+    final widgetNote= context.getArgument<CloudNote>();
+   if(widgetNote!= null){
+     // note will contain it's content
+     _note=widgetNote as CloudNote?;
+     // prepopulate text controller with the content of this note.
+     textController.text=widgetNote.text;
+     return widgetNote;
+   }
     final existingNote=_note;
+
     // if there is existing note, return that
     if(existingNote!=null){
       return existingNote;
@@ -51,9 +66,10 @@ class _NewNotesViewState extends State<NewNotesView> {
       // if not exist then create it.
       // null assertion at the end to assert that user cannot be null
       final user=AuthService.firebase().currentUser!;
-      final email=user.email!;
-      final owner=await _noteservice.getUser(email: email);
-      final newNote= await _noteservice.createNotes(owner: owner);
+      //final email=user.email;
+     // final owner=await _noteservice.getUser(email: email);
+      final newNote= await _noteservice.createNewNote(ownerUserId: user.id);
+      _note=newNote;
       return newNote;
     }
   }
@@ -66,30 +82,36 @@ class _NewNotesViewState extends State<NewNotesView> {
     final note=_note;
    // if there is no text, but note exist, then delete it,
   if(textController.text.isEmpty && note!=null ){
-   await _noteservice.deleteNote(id: note.id);
+   await _noteservice.deleteNote(documentId: note.documentId);
   }
   }
 
   // now about saving the note if it is not empty
   void saveNoteIfNotEmpty()async{
     final note=_note;
+   final text= textController.text;
+
     if(textController.text.isNotEmpty && note != null){
-     await _noteservice.updateNotes(note: note, text: _note!.text);
+     await _noteservice.updateNote(documentId: note.documentId,
+         text: text);
     }
   }
 
   // constantly updating current note based on the realtime changes
   // in the text field.
   void _textControllerListener()async{
+
     final note=_note;
      final text;
     if(note==null){
       return; // break out of function
     }
     text=textController.text;
-    await _noteservice.updateNotes(note: note, text: text);
-  }
 
+    await _noteservice.updateNote(documentId: note.documentId,
+        text: text);
+  }
+  //-------------------------------------------------------------------------
   //========================================================================
   //------------------------------------------------------------------------
   // now hook the text field changes to the listener:
@@ -102,9 +124,9 @@ class _NewNotesViewState extends State<NewNotesView> {
     textController.addListener(() {
       _textControllerListener();
     });
-
+    _textControllerListener();
   }
-
+//---------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +135,13 @@ class _NewNotesViewState extends State<NewNotesView> {
      title:  const Text('New Notes', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
       ),
-      body: FutureBuilder(future: createNote(),
+      body: FutureBuilder(future: createOrGetExistingNote(context),
           builder: (context,snapshot){
         switch(snapshot.connectionState){
           case ConnectionState.done:
           // perform logic here
           // get note returned from future using snapshot.data:
-          _note=snapshot.data as DatabaseNotes;
+         // _note=snapshot.data as DatabaseNotes;
           // now start listening to user text changes on our UI
           setupTextControllerListener();
           return TextField(
@@ -129,21 +151,14 @@ class _NewNotesViewState extends State<NewNotesView> {
             decoration: const InputDecoration(
               hintText: 'start making your notes here ...'
             ),
-
-
           );
+
 
           default:
            return const CircularProgressIndicator();
 
         }
-
-
-
-
           }
-
-
           )
       ,
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
 import 'package:note_taking_app_khirman/views/loginview.dart';
-import 'package:note_taking_app_khirman/views/notes/new_notes_view.dart';
+import 'package:note_taking_app_khirman/views/notes/create_update_noteview.dart';
 import 'package:note_taking_app_khirman/views/registerview.dart';
 import 'package:note_taking_app_khirman/views/verifyemailview.dart';
 import 'package:note_taking_app_khirman/views/notes/notesview.dart';
@@ -22,7 +22,7 @@ void main() {
       registerRoute : (context)=> const RegisterView(),
       emailVerRoute :(context)=> const VerifyEmailView(),
       notesRoute :(context)=> const NotesView(),
-      newNotesRoute: (context)=> const NewNotesView(),
+      createOrUpdateNotesRoute: (context)=> const CreateUpdateNotesView(),
     },
   ));
 }

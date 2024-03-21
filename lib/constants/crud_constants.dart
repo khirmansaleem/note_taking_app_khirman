@@ -1,5 +1,5 @@
 const dbname='notes.db';
-const notesTable='notes';
+const notesTable='note';
 const userTable='user';
 const columnId = 'id';
 const columnEmail = 'email';
@@ -9,7 +9,7 @@ const columnSynced='is_synced_with_cloud';
 
 
 const createNotesTable= '''
-      CREATE TABLE IF NOT EXISTS "notes" (
+      CREATE TABLE IF NOT EXISTS "note" (
 	     "id"	INTEGER NOT NULL,
 	     "user_id"	INTEGER NOT NULL,
 	     "text"	TEXT NOT NULL,

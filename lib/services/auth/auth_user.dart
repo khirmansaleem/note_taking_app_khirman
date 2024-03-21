@@ -11,15 +11,18 @@
 //------------------------------------------------------------------------
 import 'package:firebase_auth/firebase_auth.dart' show User;
 import 'package:flutter/foundation.dart';
-
+// we want our auth user to have an user id, to associate that user with specific
+// id.
 @immutable
 class AuthUser{
-  final String? email;
+  final String id;
+  final String email;
   final bool isEmailVerified;
-  const AuthUser({required this.email,required this.isEmailVerified});// required named parameter make it easy to understand what
+  const AuthUser({ required this.id,required this.email,
+    required this.isEmailVerified});// required named parameter make it easy to understand what
   // the arguement is.
 // copy of firebase user to our own user
   // this is done to not expose the firebase user to our ui logic
-factory AuthUser.fromFirebase(User user)=>AuthUser(email:user.email,
-    isEmailVerified: user.emailVerified );
+factory AuthUser.fromFirebase(User user)=>AuthUser(email:user.email!,
+    isEmailVerified: user.emailVerified, id: user.uid );
 }

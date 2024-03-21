@@ -4,8 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:note_taking_app_khirman/constants/routes.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_exceptions.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
-import 'dart:developer' as devtools show log;
-import 'package:note_taking_app_khirman/utilities/show_error_dialog.dart';
+import '../utilities/dailog/error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

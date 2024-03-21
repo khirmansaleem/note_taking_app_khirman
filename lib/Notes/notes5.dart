@@ -70,7 +70,7 @@
 // in case of stream, it keeps living so you should not hook into done flag.
 // snapshot represents the latest data received from a future or stream.
 //------------------------------------------------------------------------------------------------------------
-//========================> Singleton and Why we need it in our notesView? <==================================
+//========================> Singleton and Why we need it in our note service ? <==================================
 //============================================================================================================
 // in the initState of app, we were creating a new instance of noteService each time.
 // Singleton is a pattern used in software development, where you create a class
@@ -79,6 +79,10 @@
 // service and not create new instance each time.
 // for managing resources that are expensive to create every time,
 // for consistent state of a service across the whole application.
-
+// when there will be multiple instances of note service, each instance will have their
+// own database connections and resources leading to increased memory usage.
+// as there is only one instance which manages all the interactions with the database so
+// when any updations made to the notes will be reflected to every part using that
+// instance, there will be no discrepancies.
 //------------------------------------------------------------------------------------------------
 //====================================================================================================

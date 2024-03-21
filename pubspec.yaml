@@ -39,7 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   firebase_core: ^2.25.5
   firebase_auth: ^4.17.7
-  cloud_firestore: ^4.15.6
+  cloud_firestore: ^4.15.9
   firebase_analytics: ^10.8.7
   fluttertoast: ^8.0.9
   sqflite: ^2.3.2

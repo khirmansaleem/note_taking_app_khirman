@@ -6,7 +6,6 @@ import 'package:note_taking_app_khirman/services/auth/auth_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart'
 show FirebaseAuth,FirebaseAuthException;
 
-import '../../utilities/show_error_dialog.dart';
 // this is concrete implementation of auth_provider class
 
 class FirebaseAuthProvider implements AuthProvider{

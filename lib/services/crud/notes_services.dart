@@ -1,7 +1,9 @@
+/*
 // this service will grab the hold of database, read and write to the database using queries.
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:note_taking_app_khirman/constants/crud_constants.dart';
+import 'package:note_taking_app_khirman/extensions/list/filter.dart';
 import 'package:note_taking_app_khirman/services/crud/crud_crudexceptions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart'
@@ -17,33 +19,78 @@ import 'package:path/path.dart' show join;
 // caching the list of notes that noteService has.
 class NoteService {
   Database? _db;
+  DatabaseUser? _user;
   List<DatabaseNotes> _notes=[];// all te notes to current user
-  // make the instance of note service as singleton
-  // for creating the singleton instance of noteservice
+  late final StreamController<List<DatabaseNotes>> _notesStreamController;
+  // _shared is variable holding single, shared instance of NoteService class
   static final NoteService _shared=NoteService._sharedInstance();
-  // private initializer , it cannot be called from outside.
-  NoteService._sharedInstance();
+  // here creating single shared instance of class
+  NoteService._sharedInstance(){
+    _notesStreamController=StreamController<List<DatabaseNotes>>.broadcast(
+      onListen: (){
+        // to ensure that the stream controller listen to all the values get
+        // from database
+        // if a new subscriber then it will get all the notes we get from
+        // database.
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
+  // now creating factory constructor to use this single shared instance
+  // in other parts of the application.
   factory NoteService()=> _shared;// we can use it using factory constructor.
 
   // stream for holding data list of notes, and ui will listen to this stream.
   // stream controller control operations on that stream
   // every event inside stream is list of database.
   // stream controller controls the changes made to the notes list.
-  final _notesStreamController=StreamController<List<DatabaseNotes>>.broadcast();
+
+
+  //
    // this stream will subscribe to the stream controller.
-  Stream<List<DatabaseNotes>> get AllNotes=>_notesStreamController.stream;
+  Stream<List<DatabaseNotes>> get AllNotes=>_notesStreamController.stream.filter(
+      (note){
+        // boolean value from this callback will be passed to the
+        // filter function where it will filter notes based on the user.
+        // and only return notes that are associated with specific user.
+        // applying extension function on stream
+        final currentUser=_user; // get current user
+        // if current user not null
+        if(currentUser!=null){
+          // then check if userId associated with each note matches with that
+          // of current user's id. then return true
+          return note.userId==currentUser.id;
+        }
+        else{
+          throw UserShouldBeSetBeforeCreatingNotes();
+        }
+
+      }
+  );
 
   // MAKE OUR LOCAL DATABASE USER TO BE ASSOCIATED WITH FIREBASE USER TO PROCEED TO TAKE NOTES.
-  Future<DatabaseUser> getOrCreateUser({ required String email})async{
+  Future<DatabaseUser> getOrCreateUser({ required String email,
+    bool setAsCurrentUser=true
+  })async{
     await ensureDbIsOpen();
     // we have passed as parameter the email of firebase user and this function either returns
     // that user from local database if exist or otherwise create that user in local database.
     // syncing our local database user with the firebase user
+
     try{
       final user= await getUser(email: email);
+      if(setAsCurrentUser){
+        // set current user to user retrieved from database. that it already
+        // exist there
+        _user=user;
+      }
       return user;
     }on UserNotExistInTable{
       final createdUser=await createUser(email: email);
+      if(setAsCurrentUser){
+        // set current user to created user.
+        _user=createdUser;
+      }
       return createdUser;
     }catch(e){ // again throw exception caught by catch block that was in try catch of createUser.
       // because in the createUser method there was already try and catch block that was not handle
@@ -55,32 +102,47 @@ class NoteService {
 
   // read notes and cache them in "_notes" and _notesStreamController both.
   Future<void> _cacheNotes()async{
+    print('step 2: printing notes in cache');
     await ensureDbIsOpen();
     final allNotes=await getAllNotes();
-   final myNotes = allNotes.toList();
-   _notesStreamController.add(myNotes.cast<DatabaseNotes>());
+    _notes = allNotes.cast<DatabaseNotes>().toList();
+   _notesStreamController.add(_notes);
+
+    print(_notes);
 
   }
 
   // Functionality of updating the existing notes:
   Future<DatabaseNotes> updateNotes({required DatabaseNotes note,
     required String text})async{
+    print("Step#05 moving inside Update Notes");
+  print('note came from listener is $text');
     await ensureDbIsOpen();
     final db=_getDatabaseOrThrow();
-   await getNote(id: note.id);
+  final note1= await getNote(id: note.id);
+  print('getting note using get note');
+  print(note1);
+
  final updateCounts= await  db.update(notesTable, {
        columnText:text,
       columnSynced: 0
-    });
+    },
+   where: 'id= ?',
+   whereArgs: [note.id],
+ );
  if(updateCounts==0){
    throw CanNotUpdateDatabase();
  }
+
  else{
+   print('getting update counts that is : $updateCounts');
    final givenNote= await getNote(id: note.id);
+   print('given note is $givenNote');
    _notes.removeWhere((note) =>note.id==givenNote.id); // maybe that note is updated so we will update the
    // cache and stream controller with latest note.
    // first update the local cache and then apply those changes to outside world.
    _notes.add(givenNote);
+   print(_notes);
    _notesStreamController.add(_notes);
 
    return givenNote;
@@ -114,6 +176,7 @@ class NoteService {
       // first update the local cache and then apply those changes to outside world.
       _notes.add(note);
       _notesStreamController.add(_notes);
+
 
       // it can be the other way
       return note ;
@@ -169,14 +232,13 @@ class NoteService {
     if(dbUser!=owner){ // this operator will compare id's
       throw UserNotExistInTable();
     }
-    const text='Reminder : Report sending to venture capital at 3 pm tomorrow.';
+    const text='no text';
     // now ensuring everything , create the notes.
     final notesId=  await db.insert(notesTable, {
       columnUserid: owner.id,
       columnText: text,
       columnSynced:1
     });
-
    final note=DatabaseNotes(id:notesId, userId: owner.id, text: text,
         syncWithCloud: true);
   // this new note will be added to _note list and stream controller both
@@ -268,7 +330,8 @@ class NoteService {
       // now the code for creating the tables in the database.
       await db.execute(createUserTable);
       await db.execute(createNotesTable);
-
+      print('step 1 : open database');
+       print('moving all the notes to cache');
       // after opening database and creating tables, cache all the notes in the local variable
       await _cacheNotes();
 
@@ -360,3 +423,4 @@ class DatabaseNotes {
 
 }
 
+*/
