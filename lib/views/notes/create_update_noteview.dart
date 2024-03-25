@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
 import 'package:note_taking_app_khirman/services/cloud/cloud_note.dart';
 import 'package:note_taking_app_khirman/services/cloud/firebase_cloud_storage.dart';
-import 'package:note_taking_app_khirman/services/crud/notes_services.dart';
+import 'package:note_taking_app_khirman/utilities/dailog/cannot_share_empty_note_dialog.dart';
 import 'package:note_taking_app_khirman/utilities/generics/get_arguments.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNotesView extends StatefulWidget {
   const CreateUpdateNotesView({super.key});
@@ -132,6 +133,19 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      actions: [
+        IconButton(onPressed: ()async{
+          final text= textController.text;
+          if(_note==null || text.isEmpty ){
+           await cannotShareEmptyNoteDialog(context);
+          }
+          else{
+            Share.share(text);
+          }
+
+        }, icon: const Icon(Icons.share),
+          color: Colors.white,)
+      ],
      title:  const Text('New Notes', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
       ),

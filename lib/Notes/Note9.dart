@@ -93,5 +93,25 @@ fields.
 --> USING then() inside future allow you to return a synchronous value from that
 future or let you return another future from that.
 ----------> APPROACH OF REFRACTING CODE IS CUT THAT CODE FROM SOURCE.<----------
+--> for sharing notes, we can use a plugin Share Plus.
+Package adds to existing functionalities and bring them to new height.
+--> plugin go beyond what flutter can deliver.
+--> Plugin takes completely new route and is to be developed by different
+ developers and to be used for different platforms
 
+--> after using flutter clean, you can use pub get to rebuild all the
+dependencies.
+-----------------------------------------------------------------------------------
+=================================================================================
+In the Current implementation, we have our business logic inside our UI and
+that's not a good idea.
+--> We need to seperate UI from business logic.
+--> Some in between layer will decide that upon pressing certain button,
+Certain business logic should be performed, so there should be layer of abstraction
+between them.
+===================================================================================
+-------------------------------------------------------------------------------------
+when we make a constructor as constant and we make 2 instances of it with same
+arguments, then both of instances will be canonicalized means both will refer to
+same position in the memory.
  */
