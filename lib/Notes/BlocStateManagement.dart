@@ -110,6 +110,59 @@ Immutable class-->
 once the instance of class is created, it's state, the values of it's fields and
 properties cannot be changed. means all of instance variables must be declared as
 final.
-...................................................................................
+................................................................................
+=============================================================================
+// generic state from which other states extend from is usually a immutable
+//class, it is just dictating that every state comes out of the auth block
+// is of this type.
+// if you want the subclass to contain a constant constructor, then there must
+// be constant constructor in superclass as well.
+................................................................................
+// generic state from which other states extend from is usually a immutable
+//class, it is just dictating that every state comes out of the auth block
+// is of this type.
+// if you want the subclass to contain a constant constructor, then there must
+// be constant constructor in superclass as well.
+................................................................................
+when you create a AuthProvider it injects the bloc into your context.
+................................................................................
+================================================================================
+Equatable Package in Flutter---->
+The Equatable package provides an easy way to implement value equality without
+needing to override the == operator and hashCode getter manually for each class.
+It uses a simple mixin to enable value equality based on the properties of an object.
+we will be using it to differentiate between logout states.
+....................................................................................
+------------------------------------------------------------------------------------
+// the use of loading dialog is not feasible in the application because
+when we are popping from navigation stack, YOU HAVE LOADING DIALOG ON THE
+SCREEN , while that loading dialog is displayed, you can display another screen
+and push that screen in your navigation stack then when you pop from navigation
+stack, that screen will be popped instead of the loading dialog.
+// navigator dont have idea what it is actually popping.
+----------------------------------------------------------------------------------
+..................................................................................
+OVERLAYS:;;;
+Overlays in Flutter are widgets that float on top of other widgets without
+ breaking the existing layout and state of the app. They are typically used to
+ display elements that should appear above all other content, such as menus, dialogs,
+ tooltips, and, notably, loading screens.
+independent of navigation stack , displayed on top of navigation stack. independant
+of the navigation stack and independant of the changes that happen to the
+navigation stack.
+.....................................................................................
+-------------------------------------------------------------------------------------
+Loading Screen Controller::
+to control the behavior and content of the loading screen.
+// loading screen will be controlled using a controller object.
+// this controller dismiss the loading screen
+// and update the contents of the loading screen
+.....................................................................................
+--------------------------------------------------------------------------------------
+Switch is used when you want to handle all cases, if you want to handle
+ 1-2 out of 4-5 cases, you can use if and else which is a simpler
+ and more concise solution
+-----------------------------------------------------------------------------
+..........................................................................
 
  */

@@ -1,7 +1,7 @@
 import 'package:note_taking_app_khirman/services/auth/auth_user.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_provider.dart';
 import 'package:note_taking_app_khirman/services/auth/firebase_auth_provider.dart';
-
+import 'package:equatable/equatable.dart';
 // auth service that implements the auth provider.
 // auth service relays the messages of given auth provider, but can have more
 // logic.
@@ -37,6 +37,10 @@ class AuthService implements AuthProvider{
 
   @override
   Future<void> initialize()=> provider.initialize();
+
+  @override
+  Future<void> sendPasswordReset({required String toEmail})=>
+      provider.sendPasswordReset(toEmail: toEmail);
 
 
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as devtools show log;
 import 'package:note_taking_app_khirman/constants/routes.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_user.dart';
+import 'package:note_taking_app_khirman/services/auth/bloc/auth_bloc.dart';
+import 'package:note_taking_app_khirman/services/auth/bloc/auth_events.dart';
 import 'package:note_taking_app_khirman/services/cloud/cloud_note.dart';
 import 'package:note_taking_app_khirman/services/cloud/firebase_cloud_storage.dart';
 import 'package:note_taking_app_khirman/services/crud/notes_services.dart';
@@ -77,8 +80,9 @@ class _NotesViewState extends State<NotesView> {
                     final shouldlogout=await showLogOutDialog(context);
                     devtools.log(shouldlogout.toString());
                     if(shouldlogout){
-                    await AuthService.firebase().logOut();
-                    Navigator.pushNamed(context, loginRoute);
+                   // await AuthService.firebase().logOut();
+                    context.read<AuthBloc>().add(const LogoutEvent());
+                   // Navigator.pushNamed(context, loginRoute);
                     }
                     //break;
                 }
@@ -133,7 +137,5 @@ class _NotesViewState extends State<NotesView> {
 
 
           );
-
-
   }
 }

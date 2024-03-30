@@ -96,6 +96,7 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
      await _noteservice.updateNote(documentId: note.documentId,
          text: text);
     }
+
   }
 
   // constantly updating current note based on the realtime changes

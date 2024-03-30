@@ -20,7 +20,7 @@ class AuthUser{
   final bool isEmailVerified;
   const AuthUser({ required this.id,required this.email,
     required this.isEmailVerified});// required named parameter make it easy to understand what
-  // the arguement is.
+  // the argument is.
 // copy of firebase user to our own user
   // this is done to not expose the firebase user to our ui logic
 factory AuthUser.fromFirebase(User user)=>AuthUser(email:user.email!,

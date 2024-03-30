@@ -16,9 +16,9 @@ class FirebaseCloudStorage{
   Stream<Iterable<CloudNote>> allNotes({required String ownerUserId})=>
   // in query snapshot then are docs and mapping every doc with cloud note,
       // where note's user id is equal to current user id
-      notes.snapshots().map((event) => event.docs.map((doc) => 
-          CloudNote.fromSnapshot(doc)).where((note) => note.ownerUserId==ownerUserId)
-      );
+      notes.where(ownerUserIdFieldName,isEqualTo: ownerUserId).snapshots().map((event) => event.docs.map((doc) =>
+          CloudNote.fromSnapshot(doc)));
+      //.where((note) => note.ownerUserId==ownerUserId
 
   //Create a function for creating new Notes:
   // you can read and write as well to the collectionReference.

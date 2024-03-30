@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:note_taking_app_khirman/constants/routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_taking_app_khirman/services/auth/auth_exceptions.dart';
-import 'package:note_taking_app_khirman/services/auth/auth_service.dart';
+import 'package:note_taking_app_khirman/services/auth/bloc/auth_bloc.dart';
+import 'package:note_taking_app_khirman/services/auth/bloc/auth_events.dart';
+import 'package:note_taking_app_khirman/services/auth/bloc/auth_state.dart';
 import 'package:note_taking_app_khirman/utilities/dailog/error_dialog.dart';
 
 
@@ -34,7 +35,23 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<AuthBloc,AuthState>(
+      listener: (context,state)async{
+        // now handle exceptions in this bloc
+        if(state is AuthStateLoggedOut){
+          if(state.exception is InvalidCredentialsAuthException){
+            await showErrDialog(context, 'Invalid Credentials');
+          }
+          else if(state.exception is UserNotLoggedInAuthException){
+            await showErrDialog(context, 'Login Failure');
+          }
+          else if(state.exception is GenericAuthException){
+            await showErrDialog(context, 'Login Failure');
+          }
+
+        }
+      },
+    child:  Scaffold(
       appBar: AppBar(
         title: const Text(
           'Login',
@@ -62,12 +79,55 @@ class _LoginViewState extends State<LoginView> {
                     decoration:
                         const InputDecoration(hintText: "Enter your password"),
                   ),
-                  TextButton(
+
+                    TextButton(
                     onPressed: () async {
                       final email = _email.text;
                       final password = _password.text;
+                      context.read<AuthBloc>().add(
+                          LoginEvent(email: email, password: password)
+                      );
 
-                      try{
+                      }
+                   ,
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue, // Background color
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                  ,
+                  // final user=FirebaseAuth.instance.currentUser;
+                  TextButton(onPressed: (){
+                  context.read<AuthBloc>().add(
+                    const ShouldRegisterEvent()
+                  );
+
+                  },
+                      child: const Text("Not Registered yet? Register here!")
+                  ),
+                  TextButton(onPressed: (){
+                    context.read<AuthBloc>().add(
+                       const  ForgotPasswordEvent(email:null)
+                    );
+
+                  },
+                      child: const Text("Forgot Password, Click here to reset.")
+                  ),
+
+                ],
+               )
+              ),
+
+              );
+  }
+}
+
+
+
+/*
                       await AuthService.firebase().logIn(email: email, password: password);
 
                         final user=AuthService.firebase().currentUser;// it gives us the logged in user
@@ -85,38 +145,4 @@ class _LoginViewState extends State<LoginView> {
 
                           }
                         }
-
-                      }
-                      on InvalidCredentialsAuthException catch(e){
-                        await showErrDialog(context, 'Invalid Credentials');
-                      }
-                       catch(e){
-                        await showErrDialog(context,e.toString());
-                      }
-                      // ALSO HANDLING GENERIC EXCEPTIONS
-                      catch(e){
-                        await showErrDialog(context,e.toString());
-                      }
-                      }
-                   ,
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue, // Background color
-                    ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                    // final user=FirebaseAuth.instance.currentUser;
-                  TextButton(onPressed: (){
-                    Navigator.pushNamed(context, registerRoute);
-
-                  },
-                      child: const Text("Not Registered yet? Register here!")
-                  ),
-                ],
-              ),
-      );
-  }
-}
-
+                    */
