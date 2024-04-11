@@ -6,6 +6,7 @@ import 'package:note_taking_app_khirman/services/auth/bloc/auth_bloc.dart';
 import 'package:note_taking_app_khirman/services/auth/bloc/auth_events.dart';
 import 'package:note_taking_app_khirman/services/auth/bloc/auth_state.dart';
 import 'package:note_taking_app_khirman/services/auth/firebase_auth_provider.dart';
+import 'package:note_taking_app_khirman/views/SplashScreen.dart';
 import 'package:note_taking_app_khirman/views/forgotpasswordview.dart';
 import 'package:note_taking_app_khirman/views/loginview.dart';
 import 'package:note_taking_app_khirman/views/notes/create_update_noteview.dart';
@@ -19,15 +20,17 @@ void main() {
   // for firebase to be initialized before anything else
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: 'Flutter Demo',
     theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      useMaterial3: true,
+      fontFamily:'Roboto',
+      brightness: Brightness.light,
+      textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.black)),
     ),
     home: BlocProvider<AuthBloc>(
       // create instance of AuthBloc and it will pass firebaseAuthProvider in it
         create: (context)=> AuthBloc(FirebaseAuthProvider()),
-        child: const HomePage()
+        child:  HomePage()
     ),
     routes: {
       createOrUpdateNotesRoute: (context)=> const CreateUpdateNotesView(),

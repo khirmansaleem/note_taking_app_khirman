@@ -61,18 +61,18 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
-        title: const Text('Your Notes',
-          style: TextStyle(color: Colors.white),),
-          backgroundColor: Colors.blue,
+        title: const Text('My Notes',
+          style: TextStyle(color: Color(0xFF404040)),),
+        backgroundColor: Color(0xFFFFD700),
           actions:[
             IconButton(onPressed:(){
               Navigator.pushNamed(context,createOrUpdateNotesRoute);
 
             }, icon: const Icon(Icons.add),
-              color: Colors.white,
+              color: Color(0xFF404040),
             ),
             PopupMenuButton<MenuAction>(
-              icon: const Icon(Icons.more_vert,color: Colors.white),
+              icon: const Icon(Icons.more_vert,color: Color(0xFF404040)),
               onSelected: (value)async{
                 devtools.log(value.name);
                 switch(value){
@@ -95,6 +95,8 @@ class _NotesViewState extends State<NotesView> {
                 )
                 ];
               },
+              // Adjust the offset to move the menu below the AppBar
+              offset: const Offset(0, kToolbarHeight-4),
 
             )
           ],

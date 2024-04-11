@@ -17,36 +17,68 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Widget build(BuildContext context) {
 
     return  Scaffold(
-      appBar: AppBar(title: const Text("Verify Email",
-        style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.blue,),
 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // Align items along the main axis
           children: [
-            const Text('We have send you verification email, please check'),
-            const Text('If not received yet, press the button below.'),
-            TextButton(
-              onPressed: (){
-               //await AuthService.firebase().sendEmailVerification();
-                context.read<AuthBloc>().add(
-                  const SendEmailVerificationEvent()
-                );
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blue, // Background color
+            const Text("Verify Your Email",
+              style: TextStyle(
+                color: Color(0xFF404040),
+                fontSize: 32.0, // Choose the size that fits your needs
+                fontWeight: FontWeight.bold,
+              ),),
+            // for passing the textfields info to the button pressed event.
+            // text editing controller can be used here
+
+            SizedBox(height: 32),
+
+            const Text('We have send you verification email, please check', style: TextStyle(
+              color: Color(0xFF404040),
+            )),
+            const Text('If not received yet, press the button below.',
+              style: TextStyle(
+                color: Color(0xFF404040),)
+            ),
+            SizedBox(height: 24),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: TextButton(
+                onPressed: (){
+                  //await AuthService.firebase().sendEmailVerification();
+                  context.read<AuthBloc>().add(
+                      const SendEmailVerificationEvent()
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  backgroundColor: Color(0xFFFFD700), // Background color
+                ),
+                child: const Text('Send Email Verification',style: TextStyle(color: Color(0xFF404040),
+                  fontSize: 16.0,),),
               ),
-              child: const Text('Send email verification',style: TextStyle(color: Colors.white),),
             ),
-            TextButton(
-              onPressed: (){
-               context.read<AuthBloc>().add(
-                   const LogoutEvent()
-               );
-              },
-              child: const Text('Restart'),
+
+            SizedBox(height: 4),
+
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: TextButton(
+                onPressed: (){
+                  context.read<AuthBloc>().add(
+                      const LogoutEvent()
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  backgroundColor: Color(0xFFFFD700), // Background color
+                ),
+                child: const Text('Restart',style: TextStyle(color: Color(0xFF404040),
+                  fontSize: 16.0,),),
+              ),
             ),
+
+
           ],
         ),
       ),

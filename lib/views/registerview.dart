@@ -55,63 +55,131 @@ class _RegisterViewState extends State<RegisterView> {
 
         },
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'Register',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.blue,
-          ),
-          body: Column(
-            children: [
-              // for passing the textfields info to the button pressed event.
-              // text editing controller can be used here
-              TextField(
-                controller: _email,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration:
-                const InputDecoration(hintText: "Enter your email"),
+
+          body: Center(
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Create Account",
+                  style: TextStyle(
+                    color: Color(0xFF404040),
+                    fontSize: 32.0, // Choose the size that fits your needs
+                    fontWeight: FontWeight.bold,
+                  ),),
+                // for passing the textfields info to the button pressed event.
+                // text editing controller can be used here
+
+                SizedBox(height: 32),
+
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8, // 70% of screen width
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    controller: _email,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration:
+                    const InputDecoration(hintText: "Enter your email",
+                      hintStyle: TextStyle(
+                        fontSize: 14.0, // Adjust the font size of the hint text here
+                        color: Colors.grey, // Optionally adjust the color of the hint text
+                      ),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black, // Color for the border when the TextField is focused
+                        ),
+                      ),
+                    ),
+
+                  ),
+                ),
+                SizedBox(height: 16),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child:  TextField(
+                  textAlign: TextAlign.center,
+                  controller: _password,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration:
+                  const InputDecoration(hintText: "Enter your password",
+                    hintStyle: TextStyle(
+                      fontSize: 14.0, // Adjust the font size of the hint text here
+                      color: Colors.grey, // Optionally adjust the color of the hint text
+                    ),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black, // Color for the border when the TextField is focused
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration:
-                const InputDecoration(hintText: "Enter your password"),
-              ),
-              TextButton(
-                onPressed: () async {
-                  final email = _email.text;
-                  final password = _password.text;
+                SizedBox(height: 24),
+               Container(
+                 width: MediaQuery.of(context).size.width * 0.8,
+                 child:  TextButton(
+                   onPressed: () async {
+                     final email = _email.text;
+                     final password = _password.text;
+                     context.read<AuthBloc>().add(
+                         RegisterEvent(email: email,password: password)
+                     );
+
+                   },
+                   style: TextButton.styleFrom(
+                     padding: EdgeInsets.symmetric(vertical: 8),
+                     backgroundColor: Color(0xFFFFD700), // Background color
+                   ),
+                   child: const Text(
+                     'Register',
+                     style: TextStyle(color: Color(0xFF404040),
+                       fontSize: 18.0,),
+                   ),
+                 ),
+               ),
+
+
+                TextButton(onPressed: () {
                   context.read<AuthBloc>().add(
-                    RegisterEvent(email: email,password: password)
+                      const LogoutEvent() // adding this event to authbloc
+                    // will lead authbloc to emit a state which will be
+                    //logout which leads to login view
+
                   );
-
                 },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.blue, // Background color
-                ),
-                child: const Text(
-                  'Register',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+                    child:
+                      RichText(
+                      text:const  TextSpan(
+                        style: TextStyle( // Default text style for all spans
+                          color: Color(0xFF404040), // Specify the color for the text
+                          fontSize: 12.0, // Specify the font size for the text
+                        ),
+                        children: <TextSpan>[
+                            TextSpan(text: 'Already Registered? '),
+                             TextSpan(
+                            text: 'sign in here!',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                             fontWeight: FontWeight.bold
+                              // This underlines the text
+                            ),
+                          ),
 
-              TextButton(onPressed: () {
-               context.read<AuthBloc>().add(
-                 const LogoutEvent() // adding this event to authbloc
-                 // will lead authbloc to emit a state which will be
-                 //logout which leads to login view
+                        ],
+                      ),
+                    )
+                )
 
-               );
-              },
-                  child: const Text("Already Registered? Sign in here!")
-              ),
-            ],
+              ],
+            ),
           ),
+
+
         ),
       );
     }
